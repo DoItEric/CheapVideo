@@ -101,13 +101,31 @@ function buildPages(raw) {
       return;
     }
 
+    const offset = cues[0].start;
+    const items = cues.map((cue) => {
+      const start = cue.start - offset;
+      const end = cue.end - offset;
+      return {
+        start,
+        end,
+        duration: end - start,
+        text: cue.text,
+      };
+    });
+
     const content = cues.map((cue) => cue.text).filter(Boolean).join("");
     const duration = Math.max(0, cues[cues.length - 1].end - cues[0].start);
 
     pages.push({
       index: idx + 1,
+      page: idx + 1,
+      pageName: `page${idx + 1}`,
+      pagePath: `pages/page${idx + 1}.html`,
+      cssPath: `pages/page${idx + 1}.css`,
+      jsPath: `pages/page${idx + 1}.js`,
       duration,
       content,
+      items,
     });
 
     allTexts.push(...cues.map((cue) => cue.text).filter(Boolean));
