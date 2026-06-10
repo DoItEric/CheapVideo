@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const INPUT_FILE = path.join(__dirname, "step1.srt");
-const OUTPUT_FILE = path.join(__dirname, "step1_pages.json");
+const OUTPUT_FILE = path.join(__dirname, "pages.json");
 
 function timeToMs(timeStr) {
   const match = timeStr.match(
@@ -167,6 +167,9 @@ function buildPages(cues) {
 function processPage(cues, pages, allTexts) {
   if (cues.length === 0) return;
 
+  // 当前 page 在全局 SRT 中的起始时间（毫秒）
+  // item 的 start/end 将以此为基准，转换为 page 内的相对时间
+  const pageStart = cues[0].start;
   const pageDuration = Math.max(0, cues[cues.length - 1].end - cues[0].start);
   const allTextsInPage = cues.map((c) => c.text).filter(Boolean);
   const hasAnimation = cues.some((c) => c.animationBreakAfter);
@@ -180,14 +183,14 @@ function processPage(cues, pages, allTexts) {
       currentItemCues.push(cue);
 
       if (cue.animationBreakAfter) {
-        processItem(currentItemCues, items);
+        processItem(currentItemCues, items, pageStart);
         currentItemCues = [];
       }
     }
 
     // 处理最后一个 item
     if (currentItemCues.length > 0) {
-      processItem(currentItemCues, items);
+      processItem(currentItemCues, items, pageStart);
     }
 
     const summary = allTextsInPage.join("");
@@ -217,16 +220,26 @@ function processPage(cues, pages, allTexts) {
 
 /**
  * 将一个 item 内的 cues 合并为单个 item 对象
+ *
+ * @param {Array} cues       该 item 包含的所有 cues
+ * @param {Array} items      累积输出的 items 数组
+ * @param {number} pageStart 当前 page 在全局 SRT 中的起始时间（毫秒）
+ *                           用于将 item 的 start/end 转换为 page 内的相对时间
  */
-function processItem(cues, items) {
+function processItem(cues, items, pageStart = 0) {
   if (cues.length === 0) return;
 
   const content = cues.map((c) => c.text).filter(Boolean).join("");
-  const duration = Math.max(0, cues[cues.length - 1].end - cues[0].start);
+  // start / end 是相对于当前 page 起点的毫秒值（page 内从 0 开始）
+  const start = Math.max(0, cues[0].start - pageStart);
+  const end = Math.max(start, cues[cues.length - 1].end - pageStart);
+  const duration = end - start;
 
   items.push({
     index: items.length + 1,
     content,
+    start,
+    end,
     duration,
   });
 }
