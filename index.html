@@ -110,7 +110,8 @@
         currentIndex = (index + pages.length) % pages.length;
         const page = pages[currentIndex];
         applyTransition(page.transition);
-        frame.src = page.src;
+        // 兼容 pages.json 的 pagePath / pageHtmlPath / src 三种字段名
+        frame.src = page.pagePath || page.pageHtmlPath || page.src || "about:blank";
         pageStart = Date.now();
         updateProgress();
       }
