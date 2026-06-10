@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DARK-TECH · Design Spec</title>
+
+  <!-- 字体：Orbitron + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- 图标 -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'dt-bg':      '#05050a',
+            'dt-surface': '#0e0e16',
+            'dt-border':  '#1f1f2e',
+            'dt-ink':     '#f5f5f7',
+            'dt-mute':    '#8a8a9a',
+            'dt-faint':   '#5a5a6a',
+            'dt-accent':  '#e60012',
+            'dt-glow':    '#ff2d4a',
+            'dt-cyan':    '#00e5ff',
+            'dt-violet':  '#8b5cf6',
+            'dt-amber':   '#ffb800',
+            'dt-emerald': '#10d97f',
+          },
+          fontFamily: {
+            'display': ['Orbitron', 'sans-serif'],
+            'body':    ['Inter', 'sans-serif'],
+            'mono':    ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- animate.css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" />
+
+  <style>
+    /* 锁定设计尺寸 960×720（父容器 transform: scale 会等比缩放） */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #05050a;
+      color: #f5f5f7;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+    /* 完全占满视口（直接打开浏览器 OR 嵌入 iframe 都自适应） */
+    html { width: 100%; height: 100%; }
+    body {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    /* —— 渐变毛玻璃背景 —— 多层 radial-gradient 缓慢漂移 —— */
+    .bg-gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(139,92,246,0.55) 0%, transparent 42%),
+        radial-gradient(circle at 88% 82%, rgba(0,229,255,0.40) 0%, transparent 42%),
+        radial-gradient(circle at 50% 50%, rgba(230,0,18,0.30) 0%, transparent 55%),
+        radial-gradient(circle at 30% 75%, rgba(255,184,0,0.18) 0%, transparent 45%),
+        radial-gradient(circle at 75% 25%, rgba(16,217,127,0.15) 0%, transparent 45%);
+      animation: bg-flow 24s ease-in-out infinite alternate;
+      filter: blur(0px);  /* 渐变本身保持清晰 */
+    }
+    @keyframes bg-flow {
+      0%   { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, 100% 0%; }
+      33%  { background-position: 25% 25%, 75% 75%, 60% 40%, 20% 80%, 80% 20%; }
+      66%  { background-position: 50% 50%, 50% 50%, 40% 60%, 40% 60%, 60% 40%; }
+      100% { background-position: 70% 70%, 30% 30%, 30% 70%, 60% 40%, 40% 60%; }
+    }
+    /* —— 毛玻璃前景卡片 —— backdrop-filter 模糊背景渐变 —— */
+    .glass {
+      background: rgba(14, 14, 22, 0.42);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      border: 1px solid rgba(245, 245, 247, 0.10);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+    }
+    /* —— 发光 —— */
+    .glow-red    { box-shadow: 0 0 22px rgba(230, 0, 18, 0.55), 0 0 4px rgba(255, 45, 74, 0.7); }
+    .glow-cyan   { box-shadow: 0 0 20px rgba(0, 229, 255, 0.45), 0 0 4px rgba(0, 229, 255, 0.7); }
+    .glow-violet { box-shadow: 0 0 22px rgba(139, 92, 246, 0.50); }
+    /* —— 渐变文字 —— */
+    .grad-rv {
+      background: linear-gradient(135deg, #ff2d4a 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grad-cv {
+      background: linear-gradient(135deg, #00e5ff 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <!-- 渐变毛玻璃背景层 -->
+  <div class="bg-gradient"></div>
+
+  <!-- 噪点纹理（增加质感） -->
+  <div style="position:absolute; inset:0; pointer-events:none; opacity:0.35; mix-blend-mode:overlay; z-index:1;
+       background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");">
+  </div>
+
+  <!-- 主内容 -->
+  <main class="relative z-10 w-full h-full p-5 flex flex-col gap-3 min-h-0">
+
+    <!-- ====== 顶部标题（自适应高度 shrink-0） ====== -->
+    <header class="flex items-end justify-between animate__animated animate__fadeInDown shrink-0">
+      <div class="min-w-0">
+        <div class="flex items-center gap-3 mb-1">
+          <span class="inline-block w-3 h-3 rounded-full bg-dt-accent glow-red"></span>
+          <span class="font-mono text-[15px] tracking-[0.3em] text-dt-cyan uppercase font-bold">DESIGN SYSTEM · v1.0</span>
+          <span class="inline-block w-px h-3.5 bg-dt-border"></span>
+          <span class="font-mono text-[13px] text-dt-faint tracking-wider">dark-tech</span>
+        </div>
+        <h1 class="font-display font-black text-[64px] leading-none tracking-tight">
+          <span class="grad-rv">DARK-TECH</span>
+          <span class="text-dt-mute mx-3 font-light">/</span>
+          <span class="text-dt-ink">Design Spec</span>
+        </h1>
+      </div>
+      <div class="text-right font-mono text-[13px] text-dt-mute leading-tight shrink-0">
+        <div class="text-dt-cyan font-bold">2026 · 06 · 10</div>
+        <div class="text-dt-faint">960 × 720 · iframe</div>
+        <div class="text-dt-faint mt-1 flex items-center justify-end gap-1">
+          <i class="ri-vidicon-line"></i>
+          <span>video-ready</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ====== 主体三列（grid 弹性布局，每列自适应高度） ====== -->
+    <div class="grid grid-cols-12 gap-3 flex-1 min-h-0 animate__animated animate__fadeInUp animate__delay-0.4s">
+
+      <!-- 色板（5 列宽 · 2×4 grid） -->
+      <section class="col-span-5 flex flex-col min-h-0 min-w-0">
+        <div class="flex items-center gap-2 mb-2 shrink-0">
+          <i class="ri-palette-fill text-dt-cyan text-base"></i>
+          <h2 class="font-display font-bold text-[15px] tracking-[0.25em] text-dt-ink uppercase">Color Palette</h2>
+          <span class="font-mono text-[12px] text-dt-faint whitespace-nowrap">8 tokens</span>
+          <div class="flex-1 h-px bg-dt-border min-w-0"></div>
+        </div>
+        <div class="grid grid-cols-4 gap-2 flex-1 min-h-0">
+          <div class="glass rounded-lg p-2.5 flex flex-col min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#05050a] border border-dt-border mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#05050a</div>
+            <div class="font-mono text-[11px] text-dt-faint">bg</div>
+          </div>
+          <div class="glass rounded-lg p-2.5 flex flex-col min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#0e0e16] border border-dt-border mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#0e0e16</div>
+            <div class="font-mono text-[11px] text-dt-faint">surface</div>
+          </div>
+          <div class="glass rounded-lg p-2.5 flex flex-col min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#f5f5f7] mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#f5f5f7</div>
+            <div class="font-mono text-[11px] text-dt-faint">ink</div>
+          </div>
+          <div class="glass rounded-lg p-2.5 flex flex-col glow-red min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#e60012] mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#e60012</div>
+            <div class="font-mono text-[11px] text-dt-glow">accent</div>
+          </div>
+          <div class="glass rounded-lg p-2.5 flex flex-col glow-cyan min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#00e5ff] mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#00e5ff</div>
+            <div class="font-mono text-[11px] text-dt-cyan">cyan</div>
+          </div>
+          <div class="glass rounded-lg p-2.5 flex flex-col glow-violet min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#8b5cf6] mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#8b5cf6</div>
+            <div class="font-mono text-[11px] text-dt-violet">violet</div>
+          </div>
+          <div class="glass rounded-lg p-2.5 flex flex-col min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#ffb800] mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#ffb800</div>
+            <div class="font-mono text-[11px] text-dt-amber">amber</div>
+          </div>
+          <div class="glass rounded-lg p-2.5 flex flex-col min-w-0">
+            <div class="w-full flex-1 min-h-0 rounded bg-[#10d97f] mb-2"></div>
+            <div class="font-mono text-[12px] text-dt-ink font-bold truncate">#10d97f</div>
+            <div class="font-mono text-[11px] text-dt-emerald">emerald</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 字体 + 字号阶梯（4 列宽） -->
+      <section class="col-span-4 flex flex-col min-h-0 min-w-0">
+        <div class="flex items-center gap-2 mb-2 shrink-0">
+          <i class="ri-font-size-2 text-dt-cyan text-base"></i>
+          <h2 class="font-display font-bold text-[15px] tracking-[0.25em] text-dt-ink uppercase">Typography</h2>
+          <span class="font-mono text-[12px] text-dt-faint whitespace-nowrap">3 fonts · 5 scale</span>
+          <div class="flex-1 h-px bg-dt-border min-w-0"></div>
+        </div>
+        <div class="glass rounded-lg p-3 flex-1 flex flex-col gap-3 min-h-0 min-w-0">
+          <!-- 字体族 -->
+          <div class="space-y-2 shrink-0">
+            <div class="flex items-baseline justify-between gap-2">
+              <div class="font-display font-black text-[36px] leading-none text-dt-ink">Orbitron</div>
+              <div class="text-right shrink-0">
+                <div class="font-mono text-[11px] text-dt-cyan font-bold">DISPLAY · 900</div>
+                <div class="font-mono text-[10px] text-dt-faint">标题 / 大数字</div>
+              </div>
+            </div>
+            <div class="border-t border-dt-border pt-2 flex items-baseline justify-between gap-2">
+              <div class="font-body font-bold text-[26px] text-dt-ink leading-none">Inter</div>
+              <div class="text-right shrink-0">
+                <div class="font-mono text-[11px] text-dt-cyan font-bold">BODY · 400-700</div>
+                <div class="font-mono text-[10px] text-dt-faint">正文 / UI</div>
+              </div>
+            </div>
+            <div class="border-t border-dt-border pt-2 flex items-baseline justify-between gap-2">
+              <div class="font-mono font-bold text-[20px] text-dt-cyan leading-none">JetBrains</div>
+              <div class="text-right shrink-0">
+                <div class="font-mono text-[11px] text-dt-cyan font-bold">MONO · 400-700</div>
+                <div class="font-mono text-[10px] text-dt-faint">数字 / 标签</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-dt-border shrink-0"></div>
+
+          <!-- 字号阶梯（弹性高度） -->
+          <div class="space-y-1.5 flex-1 min-h-0 flex flex-col justify-around">
+            <div class="flex items-baseline gap-2">
+              <span class="font-display font-black text-dt-ink leading-none shrink-0" style="font-size:44px;">Aa</span>
+              <div class="flex-1 h-px bg-dt-border/40 self-center min-w-0"></div>
+              <span class="font-mono text-[11px] text-dt-cyan font-bold shrink-0">display · 44</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-display font-bold text-dt-ink leading-none shrink-0" style="font-size:30px;">Aa</span>
+              <div class="flex-1 h-px bg-dt-border/40 self-center min-w-0"></div>
+              <span class="font-mono text-[11px] text-dt-cyan shrink-0">h1 · 30</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-display font-bold text-dt-ink leading-none shrink-0" style="font-size:24px;">Aa</span>
+              <div class="flex-1 h-px bg-dt-border/40 self-center min-w-0"></div>
+              <span class="font-mono text-[11px] text-dt-cyan shrink-0">h2 · 24</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-body text-dt-ink shrink-0" style="font-size:18px;">Aa Body</span>
+              <div class="flex-1 h-px bg-dt-border/40 self-center min-w-0"></div>
+              <span class="font-mono text-[11px] text-dt-cyan shrink-0">body · 18</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-mono text-dt-faint shrink-0" style="font-size:14px;">caption / label</span>
+              <div class="flex-1 h-px bg-dt-border/40 self-center min-w-0"></div>
+              <span class="font-mono text-[11px] text-dt-cyan shrink-0">cap · 14</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 组件（3 列宽） -->
+      <section class="col-span-3 flex flex-col min-h-0 min-w-0">
+        <div class="flex items-center gap-2 mb-2 shrink-0">
+          <i class="ri-layout-grid-fill text-dt-cyan text-base"></i>
+          <h2 class="font-display font-bold text-[15px] tracking-[0.25em] text-dt-ink uppercase">UI</h2>
+          <span class="font-mono text-[12px] text-dt-faint whitespace-nowrap">components</span>
+          <div class="flex-1 h-px bg-dt-border min-w-0"></div>
+        </div>
+        <div class="space-y-2 flex-1 flex flex-col min-h-0 min-w-0">
+          <!-- 数据卡 -->
+          <div class="glass rounded-lg p-3 shrink-0">
+            <div class="font-mono text-[11px] text-dt-faint font-bold mb-1">DATA · 渐变大数字</div>
+            <div class="font-display font-black text-[32px] leading-none grad-cv">2,847</div>
+            <div class="flex items-center gap-2 mt-1 flex-wrap">
+              <span class="text-[12px] text-dt-mute font-mono">GPU 算力</span>
+              <span class="flex items-center gap-1">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-dt-emerald"></span>
+                <span class="font-mono text-[12px] text-dt-emerald font-bold">+12.4%</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- 按钮 -->
+          <div class="glass rounded-lg p-3 space-y-2 shrink-0">
+            <div class="font-mono text-[11px] text-dt-faint font-bold">BUTTON</div>
+            <button class="w-full px-3 py-2 rounded bg-dt-accent glow-red text-dt-ink text-[14px] font-display font-bold tracking-wider">
+              PRIMARY
+            </button>
+            <button class="w-full px-3 py-2 rounded border border-dt-cyan text-dt-cyan text-[14px] font-display font-bold tracking-wider">
+              GHOST
+            </button>
+          </div>
+
+          <!-- 圆角 + 发光 -->
+          <div class="glass rounded-lg p-3 flex-1 min-h-0">
+            <div class="font-mono text-[11px] text-dt-faint font-bold mb-2">RADIUS · GLOW</div>
+            <div class="flex gap-2 items-end mb-3 justify-center">
+              <div class="w-7 h-7 bg-dt-cyan/40 rounded-[2px]"></div>
+              <div class="w-7 h-7 bg-dt-cyan/50 rounded-[4px]"></div>
+              <div class="w-7 h-7 bg-dt-cyan/60 rounded-[8px]"></div>
+              <div class="w-7 h-7 bg-dt-cyan/70 rounded-[12px]"></div>
+            </div>
+            <div class="flex gap-2 font-mono text-[10px] text-dt-faint mb-3 justify-center">
+              <span class="w-7 text-center">2px</span>
+              <span class="w-7 text-center">4</span>
+              <span class="w-7 text-center">8</span>
+              <span class="w-7 text-center">12</span>
+            </div>
+            <div class="flex gap-2 items-center justify-center">
+              <div class="w-8 h-8 bg-dt-accent rounded-full glow-red"></div>
+              <div class="w-8 h-8 bg-dt-cyan rounded-full glow-cyan"></div>
+              <div class="w-8 h-8 bg-dt-violet rounded-full glow-violet"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ====== 底部 Badge 行 ====== -->
+    <footer class="flex items-center justify-between animate__animated animate__fadeInUp animate__delay-1s shrink-0">
+      <div class="flex gap-2 flex-wrap">
+        <span class="px-3 py-1.5 rounded bg-dt-accent/20 text-dt-glow text-[13px] font-mono font-bold border border-dt-accent/40">HOT</span>
+        <span class="px-3 py-1.5 rounded bg-dt-cyan/20 text-dt-cyan text-[13px] font-mono font-bold border border-dt-cyan/40">NEW</span>
+        <span class="px-3 py-1.5 rounded bg-dt-violet/20 text-dt-violet text-[13px] font-mono font-bold border border-dt-violet/40">BETA</span>
+        <span class="px-3 py-1.5 rounded bg-dt-amber/20 text-dt-amber text-[13px] font-mono font-bold border border-dt-amber/40">PRO</span>
+      </div>
+      <div class="font-mono text-[12px] text-dt-faint flex items-center gap-3 shrink-0">
+        <span>scale · 1.6×</span>
+        <span class="text-dt-border">|</span>
+        <span>mobile-friendly</span>
+      </div>
+    </footer>
+
+  </main>
+</body>
+</html>
