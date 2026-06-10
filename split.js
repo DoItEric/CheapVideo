@@ -194,6 +194,8 @@ function processPage(cues, pages, allTexts) {
 
     pages.push({
       index: pages.length + 1,
+      pageName: `page${pages.length + 1}.html`,
+      pageHtmlPath: `pages/page${pages.length + 1}.html`,
       duration: pageDuration,
       summary,
       items,
