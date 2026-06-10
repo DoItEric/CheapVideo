@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML PPT Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles/ppt.css" />
+</head>
+<body>
+  <main class="stage-shell">
+    <section class="stage-wrapper">
+      <div id="slide-stage" class="slide-stage">
+        <iframe id="slide-frame" class="slide-frame" title="ppt-page" src="./pages/page1.html" allowtransparency="true"></iframe>
+        <div class="progress-wrap" aria-label="播放进度">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button id="toggle-controls" class="toggle-controls" type="button" title="显示/隐藏操作区" aria-label="显示或隐藏操作区">
+    <i class="ri-equalizer-2-line" aria-hidden="true"></i>
+  </button>
+  <div id="controls" class="controls hidden">
+    <button id="prev-btn" type="button">上一页</button>
+    <button id="play-btn" type="button">自动播放</button>
+    <button id="next-btn" type="button">下一页</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <script>
+    (function () {
+      const pages = [        
+        { src: "./pages/page1.html", duration: 13900, transition: "slide" },
+        { src: "./pages/page2.html", duration: 18933, transition: "glitch" },
+        { src: "./pages/page3.html", duration: 16900, transition: "canvas-pull" },
+        { src: "./pages/page4.html", duration: 967, transition: "flip" },
+        { src: "./pages/page5.html", duration: 11600, transition: "slide" },
+        { src: "./pages/page6.html", duration: 5400, transition: "glitch" },
+        { src: "./pages/page7.html", duration: 19000, transition: "canvas-pull" },
+        { src: "./pages/page8.html", duration: 9067, transition: "flip" },
+        { src: "./pages/page9.html", duration: 26166, transition: "slide" },
+        { src: "./pages/page10.html", duration: 14134, transition: "glitch" },
+        { src: "./pages/page11.html", duration: 14967, transition: "canvas-pull" },
+        { src: "./pages/page12.html", duration: 20400, transition: "flip" },
+        { src: "./pages/page13.html", duration: 15600, transition: "slide" },
+        { src: "./pages/page14.html", duration: 6900, transition: "glitch" },
+        { src: "./pages/page15.html", duration: 17500, transition: "canvas-pull" },
+        { src: "./pages/page16.html", duration: 14333, transition: "flip" },
+        { src: "./pages/page17.html", duration: 15434, transition: "slide" },
+        { src: "./pages/page18.html", duration: 13666, transition: "glitch" }
+      ];
+
+      const frame = document.getElementById("slide-frame");
+      const stage = document.getElementById("slide-stage");
+      const progressBar = document.getElementById("progress-bar");
+      const controls = document.getElementById("controls");
+      const toggleControls = document.getElementById("toggle-controls");
+      const prevBtn = document.getElementById("prev-btn");
+      const playBtn = document.getElementById("play-btn");
+      const nextBtn = document.getElementById("next-btn");
+
+      let currentIndex = 0;
+      let isPlaying = false;
+      let autoTimer = null;
+      let rafId = null;
+      let pageStart = Date.now();
+
+      function applyTransition(type) {
+        stage.classList.remove("transition-slide", "transition-flip", "transition-canvas-pull", "transition-glitch");
+        if (type === "flip") {
+          stage.classList.add("transition-flip");
+          return;
+        }
+        if (type === "glitch") {
+          stage.classList.add("transition-glitch");
+          return;
+        }
+        if (type === "canvas-pull") {
+          stage.classList.add("transition-canvas-pull");
+          return;
+        }
+        stage.classList.add("transition-slide");
+      }
+
+      function updateProgress() {
+        const page = pages[currentIndex];
+        const elapsed = Date.now() - pageStart;
+        const ratio = Math.max(0, Math.min(1, elapsed / page.duration));
+        const whole = ((currentIndex + ratio) / pages.length) * 100;
+        progressBar.style.width = `${whole}%`;
+      }
+
+      function tickProgress() {
+        updateProgress();
+        if (isPlaying) {
+          rafId = requestAnimationFrame(tickProgress);
+        }
+      }
+
+      function stopProgressLoop() {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      }
+
+      function renderPage(index) {
+        currentIndex = (index + pages.length) % pages.length;
+        const page = pages[currentIndex];
+        applyTransition(page.transition);
+        frame.src = page.src;
+        pageStart = Date.now();
+        updateProgress();
+      }
+
+      function scheduleNext() {
+        clearTimeout(autoTimer);
+        if (!isPlaying) {
+          return;
+        }
+        const page = pages[currentIndex];
+        autoTimer = setTimeout(() => {
+          renderPage(currentIndex + 1);
+          scheduleNext();
+        }, page.duration);
+      }
+
+      function play() {
+        if (isPlaying) {
+          return;
+        }
+        isPlaying = true;
+        playBtn.textContent = "暂停播放";
+        pageStart = Date.now();
+        scheduleNext();
+        tickProgress();
+      }
+
+      function pause() {
+        isPlaying = false;
+        playBtn.textContent = "自动播放";
+        clearTimeout(autoTimer);
+        stopProgressLoop();
+        updateProgress();
+      }
+
+      prevBtn.addEventListener("click", () => {
+        renderPage(currentIndex - 1);
+        if (isPlaying) {
+          scheduleNext();
+        }
+      });
+
+      nextBtn.addEventListener("click", () => {
+        renderPage(currentIndex + 1);
+        if (isPlaying) {
+          scheduleNext();
+        }
+      });
+
+      playBtn.addEventListener("click", () => {
+        if (isPlaying) {
+          pause();
+        } else {
+          play();
+        }
+      });
+
+      toggleControls.addEventListener("click", () => {
+        controls.classList.toggle("hidden");
+      });
+
+      renderPage(0);
+      updateProgress();
+
+      // 根据 stage 实际尺寸缩放 iframe 内容（原始设计尺寸 960×720）
+      const DESIGN_W = 960;
+      const DESIGN_H = 720;
+      function scaleFrame() {
+        const sw = stage.offsetWidth;
+        const sh = stage.offsetHeight;
+        const scale = Math.min(sw / DESIGN_W, sh / DESIGN_H);
+        frame.style.transform = `scale(${scale})`;
+        // 居中：缩放后实际占据空间为 DESIGN_W*scale × DESIGN_H*scale
+        frame.style.left = `${(sw - DESIGN_W * scale) / 2}px`;
+        frame.style.top  = `${(sh - DESIGN_H * scale) / 2}px`;
+      }
+      scaleFrame();
+      new ResizeObserver(scaleFrame).observe(stage);
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+  <script src="./scripts/silk-bg.js"></script>
+</body>
+</html>

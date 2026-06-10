@@ -1,0 +1,16 @@
+{
+  "name": "html-ppt",
+  "version": "1.0.0",
+  "description": "这是一个纯静态的 HTML PPT 模板项目，用于让用户和 AI 快速生成可播放、可扩展动画的演示页面。",
+  "main": "record.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^19.0.0",
+    "puppeteer-screen-recorder": "^3.0.6"
+  }
+}
