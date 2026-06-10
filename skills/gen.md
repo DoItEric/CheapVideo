@@ -23,7 +23,8 @@ html-ppt-template/
 │   └── index.css           # 播放器外壳样式（不参与单页生成）
 ├── themes/
 │   ├── tech.md             # 技术栈选型说明（CDN/库用法速查）
-│   └── dark-tech/          # 暗色科技风主题素材（按需参考）
+│   ├── dark-tech/          # 暗色科技风主题（娱乐向，emoji 偏活跃）
+│   └── dark-tech-standard/ # 暗色科技风主题（专业向，emoji 画龙点睛）
 ├── skills/
 │   └── gen.md              # ← 本文件
 ├── record.js               # Puppeteer 录屏脚本
@@ -82,11 +83,13 @@ html-ppt-template/
 ## 3. 页面文件结构（每个 page 必须输出 3 个文件）
 
 根据要求的theme模板完成。
+
 ---
 
 ## 4. 画布与排版基准（960×720）
 
 根据要求的theme模板完成。
+
 ---
 
 ## 5. 动画时间轴：把 `items` 翻译成画面节奏
@@ -119,74 +122,16 @@ html-ppt-template/
 
 ---
 
-## 6. Emoji 使用规范（必读 · 让画面"鲜活"）
+## 6. Emoji 使用规范（按主题差异化）
 
-> 视频场景里 emoji 是性价比最高的视觉素材：体积小、跨平台、情绪拉满。根据需要在页面中添加emoji，并按以下规则使用。
-
-### 6.1 为什么必须用 emoji
-
-- 文字太"静"——在 4 秒的快切节奏里，纯文字用户记不住
-- emoji 能在 **200ms** 内传递情绪
-- emoji + 文字组合比纯文字 **记忆度提升 40%+**
-- 替代低质量的 SVG / icon，比 icon 更"接地气"，更符合短视频调性
-- 
-### 6.2 emoji 的使用方式
-
-**方式 A：超大尺寸主视觉（推荐）**
-```html
-<div class="text-[120px] leading-none">⚠️</div>
-```
-- 适用：开场警示 / 概念钩子 / 收尾金句
-- 字号 80-160px，做"巨型表情墙"
-- 配合 `animate__zoomIn` / `animate__tada`
-
-**方式 B：卡片角标 / 状态点**
-```html
-<div class="glass rounded-lg p-3">
-  <div class="text-2xl mb-1">💸</div>
-  <div class="font-display font-bold text-[24px]">几万块</div>
-  <div class="font-mono text-[14px] text-dt-mute">打了水漂</div>
-</div>
-```
-- 卡片左上角放 24-40px 的小 emoji
-- 配合 `glass` + `glow` 发光
-
-**方式 C：标题内嵌（让标题更生动）**
-```html
-<h1 class="font-display font-black text-[44px]">
-  AI 到底是怎么工作的 🤔
-</h1>
-```
-- 标题尾 / 标题中加一个 emoji 收口
-- 字号和标题字重保持一致
-
-**方式 D：背景装饰（半透明大 emoji）**
-```html
-<div class="absolute right-[-40px] top-[-40px] text-[200px] opacity-10 select-none pointer-events-none">🤖</div>
-```
-- 绝对定位、超大、低不透明度
-- 装饰用，不参与交互
-- 每页 1-2 个
-
-**方式 E：列表项前缀**
-```html
-<ul class="space-y-2">
-  <li class="flex items-start gap-2"><span class="text-xl">💸</span>钱也打了水漂</li>
-  <li class="flex items-start gap-2"><span class="text-xl">🤖</span>AI 才是流量分发者</li>
-</ul>
-```
-- 16-24px 小 emoji 作为项目符号
-- 替代枯燥的圆点
-
-### 6.3 emoji 使用硬性约束
-
-1. ✅ **根据内容选择是否使用emoji，用多少emoji*（含文字内的、装饰的、卡片的）
-2. ✅ 同一页 emoji **不超过 8 种不同种类**（多了会乱）
-3. ✅ 用大尺寸 emoji 做主视觉时（> 80px），配 `glow` 颜色
-4. ❌ **不要**用纯文字方框代替 emoji——这是"大大小小的方框"问题的根源
-5. ❌ **不要**每页都用同一套 emoji（轮换着用）
-6. ❌ **不要**用真人头像类 emoji（👨 👩）——会显得幼稚，用 👤 👨‍💼
-7.  ❌ **不要**用国旗类（🇨🇳 🇺🇸）和肤色 emoji——避免争议
+> **通用原则**（适用于所有主题）：
+> - 文字太"静"——在 4 秒的快切节奏里，纯文字用户记不住
+> - emoji 能在 **200ms** 内传递情绪，体积小、跨平台、性价比高
+> - emoji + 文字组合比纯文字 **记忆度提升 40%+**
+> - 替代低质量的 SVG / icon，比 icon 更"接地气"，更符合短视频调性
+>
+> **每个主题的具体 emoji 规范见各自的设计文档**
+---
 
 ## 7. 内容设计原则（来自 `videoppt.md`）
 
@@ -288,8 +233,6 @@ process.exit(bad?1:0);
 - [ ] **最后 1 页**有金句落款（账号名 / slogan）
 - [ ] 引用 `remixicon` / `typed.js` / `vanta` 时 **CDN URL 正确**（见 `themes/tech.md`）
 - [ ] HTML 中 `<script id="page-timeline">` 里的 JSON **与 pages.json 中对应页的 items 数组完全一致**
-- [ ] 如有emoji ，尺寸 ≥ 60px（做主视觉）
-
 ---
 
 > **一句话总结**：拿到 `pages.json` 的每一条 `page`，按"读 items → 设计画面（含 emoji 主视觉） → 写 .html/.css/.js → 跑 §9 检查"的流程循环 N 次，直到所有页都能在 `index.html` 里流畅播放，并且 **没有任何一页是"大大小小的方框"**。

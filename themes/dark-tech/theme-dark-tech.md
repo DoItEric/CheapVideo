@@ -452,3 +452,97 @@ tailwind.config = {
 **规则：** 图标颜色统一用 `text-dt-cyan` 或 `text-dt-faint`，字号统一 `text-base` (16px)
 
 ---
+
+## 12. Emoji 使用规范 · 娱乐向
+
+> **本主题的 emoji 角色**：画面的"情绪放大器"——让 4 秒快切节奏里的每一页都鲜活起来
+
+### 12.1 风格定位
+
+- 主题本身偏互联网感、炫酷，所以 emoji 可以**活跃、丰富、大胆**
+- emoji 不是装饰，是**情绪传达的载体**——选错 emoji 整页气质就垮
+- 每个 emoji 都应该有"作用"，不能为了"画面丰富"而堆砌
+- 娱乐向容忍度高，但**不能低俗**（不用涉及性别 / 肤色 / 国籍的表情）
+
+### 12.2 emoji 的 5 种使用方式
+
+**方式 A：超大尺寸主视觉（推荐 · 招牌用法）**
+
+```html
+<div class="text-[140px] leading-none animate__animated animate__zoomIn">⚠️</div>
+```
+
+- 适用：开场警示 / 概念钩子 / 收尾金句
+- 字号 80-160px，做"巨型表情墙"
+- 配合 `animate__zoomIn` / `animate__tada`
+- 配 `glow-red/cyan/violet` 任一色作为底色
+
+**方式 B：卡片角标 / 状态点**
+
+```html
+<div class="glass rounded-lg p-3">
+  <div class="text-3xl mb-1">💸</div>
+  <div class="font-display font-bold text-[24px]">几万块</div>
+  <div class="font-mono text-[14px] text-dt-mute">打了水漂</div>
+</div>
+```
+
+- 卡片左上角放 24-40px 的小 emoji
+- 配合 `glass` + `glow` 发光
+
+**方式 C：标题内嵌（让标题更生动）**
+
+```html
+<h1 class="font-display font-black text-[44px]">
+  AI 到底是怎么工作的 🤔
+</h1>
+```
+
+- 标题尾 / 标题中加一个 emoji 收口
+- 字号和标题字重保持一致
+
+**方式 D：背景装饰（半透明大 emoji）**
+
+```html
+<div class="absolute right-[-40px] top-[-40px] text-[220px] opacity-10 select-none pointer-events-none">🤖</div>
+```
+
+- 绝对定位、超大（200-260px）、低不透明度（10-15%）
+- 装饰用，不参与交互
+- 每页 1-2 个
+
+**方式 E：列表项前缀**
+
+```html
+<ul class="space-y-2">
+  <li class="flex items-start gap-2"><span class="text-2xl">💸</span>钱也打了水漂</li>
+  <li class="flex items-start gap-2"><span class="text-2xl">🤖</span>AI 才是流量分发者</li>
+</ul>
+```
+
+- 20-28px 小 emoji 作为项目符号
+- 替代枯燥的圆点
+
+### 12.3 推荐的 emoji 速查
+
+| 场景 | 候选 emoji |
+|------|------------|
+| 警示 / 风险 | ⚠️ 🚨 ❌ 💥 🔥 |
+| 金钱 / 损失 | 💸 💰 💵 📉 📊 |
+| 思考 / 疑问 | 🤔 ❓ 🧐 💭 |
+| 成功 / 增长 | 🚀 📈 ✨ 💎 🏆 |
+| 技术 / 工具 | 🤖 ⚙️ 🛠️ 💻 🔧 |
+| 警告 / 否定 | 🚫 ⛔ ❎ |
+| 笑脸 / 情绪 | 😱 😅 🤯 🥲 |
+| 神秘 / 未知 | 🕵️ 🌀 🌌 🔮 |
+
+### 12.4 硬性约束
+
+1. ✅ **每页 emoji 种类 ≤ 8 种**（多了会乱，且会让画面变成"emoji 海报"）
+2. ✅ **大尺寸 emoji（> 80px）必须配 `glow-red/cyan/violet` 任一色**
+3. ✅ **同一组 emoji 至少轮换 3 页再重复**（不要每页都用同一套）
+4. ❌ **不要用真人头像类** emoji（👨 👩）—— 用 👤 👨‍💼
+5. ❌ **不要用国旗类**（🇨🇳 🇺🇸）和**肤色** emoji
+6. ❌ **不要每页都是"巨型 emoji + 一句话"**——会显得偷懒
+7. ❌ **不要在严肃数字旁边放搞笑 emoji**（如"利润率 87% 🤣"）
+
