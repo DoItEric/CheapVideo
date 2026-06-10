@@ -22,21 +22,7 @@
 
 ---
 
-## 1. 设计定位与适用场景
-
-**适用：**
-- AI / 算力 / GPU / 数据类产品介绍
-- 行业洞察 / 趋势预测类报告
-- 科技感品牌发布会
-- 任何想"炫酷直白"的视频 PPT
-
-**不适用：**
-- 商务严肃报告（建议另起 `themes/corporate/` 主题）
-- 教育 / 课件（字号偏大、装饰偏多，不适合长时阅读）
-
----
-
-## 2. 设计尺寸与自适应
+## 1. 设计尺寸与自适应
 
 ### 基础尺寸
 
@@ -70,7 +56,7 @@ body {
 
 ---
 
-## 3. 色板（Color Tokens）
+## 2. 色板（Color Tokens）
 
 **11 个语义色 token**，已写入 Tailwind config，使用前缀 `dt-`（dark-tech）：
 
@@ -122,9 +108,9 @@ tailwind.config = {
 
 ---
 
-## 4. 字体系统（Typography）
+## 3. 字体系统（Typography）
 
-### 3 字体族（Tailwind 已配置）
+### 字体族（Tailwind 已配置）
 
 | 用途 | Token | 字体栈 | 字重 |
 |------|-------|--------|------|
@@ -177,7 +163,7 @@ tailwind.config = {
 
 ---
 
-## 5. 间距（Spacing）
+## 4. 间距（Spacing）
 
 基于 Tailwind 默认的 4px 基准网格。本主题高频使用的间距档位：
 
@@ -193,7 +179,7 @@ tailwind.config = {
 
 ---
 
-## 6. 圆角（Border Radius）
+## 5. 圆角（Border Radius）
 
 **4 档圆角**，统一使用（不要混用其他值）：
 
@@ -208,7 +194,7 @@ tailwind.config = {
 
 ---
 
-## 7. 发光（Glow）· 关键特色
+## 6. 发光（Glow）· 关键特色
 
 **3 种 glow 阴影**，让元素呈现"科技发光"质感：
 
@@ -237,7 +223,7 @@ tailwind.config = {
 
 ---
 
-## 8. 渐变（Gradient）
+## 7. 渐变（Gradient）
 
 **3 种渐变文字效果**（用 `background-clip: text`）：
 
@@ -277,7 +263,7 @@ tailwind.config = {
 
 ---
 
-## 9. 玻璃拟态（Glassmorphism）· 关键特色
+## 8. 玻璃拟态（Glassmorphism）· 关键特色
 
 **`.glass` class** — 所有前景卡片都用这个：
 
@@ -310,7 +296,7 @@ tailwind.config = {
 
 ---
 
-## 10. 背景系统 · 核心
+## 9. 背景系统 · 核心
 
 ### 推荐方案：CSS 渐变毛玻璃（强烈推荐）
 
@@ -353,91 +339,9 @@ tailwind.config = {
 - 琥珀（30%, 75%）— 左下
 - 翠绿（75%, 25%）— 右上
 
-**为什么推荐 CSS 渐变（不用 Vanta）：**
-- Vanta fog：雾气弥漫，**诡异**
-- Vanta net：粒子网络线条，**太乱**
-- Vanta waves / clouds：与本主题调性不匹配
-- **CSS radial-gradient：完全可控、零依赖、缓慢漂移有"呼吸感"**
-
-### 备选方案：Vanta（如果客户特殊要求）
-
-如果一定要用 Vanta，使用 **`vanta.halo`**（光晕聚焦感）或 **`vanta.dots`**（圆点粒子），并降低强度：
-
-```javascript
-VANTA.HALO({
-  el: "#vanta-bg",
-  mouseControls: false, touchControls: false, gyroControls: false,
-  minHeight: 720, minWidth: 960,
-  baseColor: 0x05050a,
-  backgroundColor: 0x05050a,
-  color1: 0x8b5cf6,  // 紫
-  color2: 0x00e5ff,  // 青
-  amplitudeFactor: 0.8,
-  sizeFactor: 0.6,
-});
-```
-
 ---
 
-## 11. 布局规范（弹性化 · 关键）
-
-### 必须使用的布局类
-
-每个 PPT 页面必须遵循的弹性布局模式：
-
-```html
-<main class="relative z-10 w-full h-full p-5 flex flex-col gap-3 min-h-0">
-
-  <!-- 顶部 header（不压缩） -->
-  <header class="shrink-0">...</header>
-
-  <!-- 主体（占满剩余空间） -->
-  <div class="grid grid-cols-12 gap-3 flex-1 min-h-0">
-    <section class="col-span-X flex flex-col min-h-0 min-w-0">...</section>
-  </div>
-
-  <!-- 底部 footer（不压缩） -->
-  <footer class="shrink-0">...</footer>
-</main>
-```
-
-### 关键 Tailwind 类（必须理解）
-
-| 类 | 含义 | 使用场景 |
-|----|------|----------|
-| `flex-1` | 占满父容器剩余空间 | 主区域 |
-| `shrink-0` | 不被压缩（固定尺寸） | 标题、footer、关键标签 |
-| `min-h-0` | 允许收缩到 0 | flex/grid 子项，必须配合 `flex-1` |
-| `min-w-0` | 允许收缩到 0 | 防止 flex/grid 子项内容溢出 |
-| `flex flex-col` | 垂直弹性 | 所有 section 默认 |
-| `grid grid-cols-12` | 12 列网格 | 主体布局 |
-| `gap-3` | 12px 间距 | section 之间 |
-
-### 三列并排模板（最常用）
-
-```html
-<div class="grid grid-cols-12 gap-3 flex-1 min-h-0">
-  <!-- 色板 / 主内容：5 列宽 -->
-  <section class="col-span-5 flex flex-col min-h-0 min-w-0">...</section>
-
-  <!-- 字体 / 次内容：4 列宽 -->
-  <section class="col-span-4 flex flex-col min-h-0 min-w-0">...</section>
-
-  <!-- 组件 / 边栏：3 列宽 -->
-  <section class="col-span-3 flex flex-col min-h-0 min-w-0">...</section>
-</div>
-```
-
-### ❌ 禁止事项
-
-- ❌ 固定高度 `h-[500px]` 等（应该用 `flex-1`）
-- ❌ 固定宽度 `w-[800px]` 等（应该用 `flex-1` 或 `col-span-X`）
-- ❌ `overflow: hidden` 在外层（会导致动画/动效被裁剪）
-- ❌ 忘记 `min-h-0`（grid/flex 子项默认 `min-height: auto`，可能撑爆布局）
-
----
-
-## 12. 动效规范
+## 10. 动效规范
 
 ### animate.css 使用规则
 
@@ -516,7 +420,7 @@ VANTA.HALO({
 
 ---
 
-## 13. 图标规范
+## 11. 图标规范
 
 使用 **Remixicon**（统一图标库）：
 
@@ -548,236 +452,3 @@ VANTA.HALO({
 **规则：** 图标颜色统一用 `text-dt-cyan` 或 `text-dt-faint`，字号统一 `text-base` (16px)
 
 ---
-
-## 14. 最小页面模板（可直接拷贝）
-
-完整可运行的最小模板，所有约束都已包含：
-
-```html
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PAGE · dark-tech</title>
-
-  <!-- 字体 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
-
-  <!-- Tailwind + dt-* token -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: {
-        'dt-bg':'#05050a','dt-surface':'#0e0e16','dt-border':'#1f1f2e',
-        'dt-ink':'#f5f5f7','dt-mute':'#8a8a9a','dt-faint':'#5a5a6a',
-        'dt-accent':'#e60012','dt-glow':'#ff2d4a','dt-cyan':'#00e5ff',
-        'dt-violet':'#8b5cf6','dt-amber':'#ffb800','dt-emerald':'#10d97f',
-      }, fontFamily: {
-        display:['Orbitron','sans-serif'], body:['Inter','sans-serif'], mono:['JetBrains Mono','monospace'],
-      }}}
-    }
-  </script>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" />
-
-  <style>
-    html, body { margin:0; padding:0; background:#05050a; color:#f5f5f7; font-family:'Inter',sans-serif; overflow:hidden; }
-    html { width:100%; height:100%; }
-    body { width:100%; height:100%; position:relative; }
-    .bg-gradient {
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(139,92,246,0.55) 0%, transparent 42%),
-        radial-gradient(circle at 88% 82%, rgba(0,229,255,0.40) 0%, transparent 42%),
-        radial-gradient(circle at 50% 50%, rgba(230,0,18,0.30) 0%, transparent 55%),
-        radial-gradient(circle at 30% 75%, rgba(255,184,0,0.18) 0%, transparent 45%),
-        radial-gradient(circle at 75% 25%, rgba(16,217,127,0.15) 0%, transparent 45%);
-      animation: bg-flow 24s ease-in-out infinite alternate;
-    }
-    @keyframes bg-flow {
-      0%   { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, 100% 0%; }
-      33%  { background-position: 25% 25%, 75% 75%, 60% 40%, 20% 80%, 80% 20%; }
-      66%  { background-position: 50% 50%, 50% 50%, 40% 60%, 40% 60%, 60% 40%; }
-      100% { background-position: 70% 70%, 30% 30%, 30% 70%, 60% 40%, 40% 60%; }
-    }
-    .glass {
-      background: rgba(14, 14, 22, 0.42);
-      backdrop-filter: blur(28px) saturate(160%);
-      -webkit-backdrop-filter: blur(28px) saturate(160%);
-      border: 1px solid rgba(245, 245, 247, 0.10);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
-    }
-    .glow-red    { box-shadow: 0 0 22px rgba(230,0,18,0.55), 0 0 4px rgba(255,45,74,0.7); }
-    .glow-cyan   { box-shadow: 0 0 20px rgba(0,229,255,0.45), 0 0 4px rgba(0,229,255,0.7); }
-    .glow-violet { box-shadow: 0 0 22px rgba(139,92,246,0.50); }
-    .grad-rv { background: linear-gradient(135deg,#ff2d4a 0%,#8b5cf6 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .grad-cv { background: linear-gradient(135deg,#00e5ff 0%,#8b5cf6 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  </style>
-</head>
-<body>
-  <!-- 背景层 -->
-  <div class="bg-gradient"></div>
-  <!-- 噪点 -->
-  <div style="position:absolute;inset:0;pointer-events:none;opacity:0.35;mix-blend-mode:overlay;z-index:1;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");"></div>
-
-  <!-- 主内容 -->
-  <main class="relative z-10 w-full h-full p-5 flex flex-col gap-3 min-h-0">
-
-    <!-- 顶部 header -->
-    <header class="shrink-0">
-      <h1 class="font-display font-black text-[64px] leading-none">
-        <span class="grad-rv">PAGE TITLE</span>
-      </h1>
-    </header>
-
-    <!-- 主体三列 -->
-    <div class="grid grid-cols-12 gap-3 flex-1 min-h-0">
-      <section class="col-span-5 glass rounded-lg p-3">左</section>
-      <section class="col-span-4 glass rounded-lg p-3">中</section>
-      <section class="col-span-3 glass rounded-lg p-3">右</section>
-    </div>
-
-    <!-- 底部 footer -->
-    <footer class="shrink-0 text-dt-faint text-[14px]">© DARK-TECH</footer>
-  </main>
-</body>
-</html>
-```
-
----
-
-## 15. 给 AI 的硬性约束清单（生成页面时必须遵守）
-
-### ✅ 必须做
-
-1. ✅ 使用 Tailwind `dt-*` 颜色 token，**不要写硬编码 hex**
-2. ✅ body 用 `width:100%; height:100%;`，**不要写固定 960×720**
-3. ✅ 主内容用弹性布局：`flex-1 min-h-0`，**不要写固定 height**
-4. ✅ 字号放大约 1.6 倍（display 44 / h1 30 / h2 24 / body 18 / cap 14）
-5. ✅ 关键卡片用 `glass` 类（毛玻璃）
-6. ✅ 关键 CTA / 状态指示器加 `glow-red` / `glow-cyan` / `glow-violet`
-7. ✅ 关键大数字 / 主标题用 `grad-rv` / `grad-cv` 渐变文字
-8. ✅ 背景用 `.bg-gradient`（CSS 渐变 + keyframes），**不用 Vanta**
-9. ✅ 字体族：标题用 `font-display`，正文用 `font-body`，数字 / 标签用 `font-mono`
-10. ✅ 动效用 `animate.css`，总入场时间 < 1.5s
-
-### ❌ 禁止做
-
-1. ❌ 不用 Vanta fog / net（雾感和粒子线太乱）
-2. ❌ 不在元素上用 `overflow:hidden` 在外层
-3. ❌ 不用 `animate__pulse infinite` 等无限循环动画
-4. ❌ 不用 4 档圆角外的其他圆角值（如 6px / 10px）
-5. ❌ 不用 `dt-*` token 之外的颜色
-6. ❌ 不用衬线字体（serif），全部 sans-serif
-7. ❌ 不在 body 上用 transform 动画
-8. ❌ 不堆砌超过 3 种不同动画效果
-9. ❌ 不留大块空白（视频场景节奏要快）
-10. ❌ 文字不要直接用纯白（`#ffffff`），必须用 `dt-ink`（`#f5f5f7` 微暖白）
-
----
-
-## 16. 速查：完整 HTML 模板头部
-
-每次生成新页面时，**复制这段作为 `<head>` 的基础**：
-
-```html
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>...</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: {
-        'dt-bg':'#05050a','dt-surface':'#0e0e16','dt-border':'#1f1f2e',
-        'dt-ink':'#f5f5f7','dt-mute':'#8a8a9a','dt-faint':'#5a5a6a',
-        'dt-accent':'#e60012','dt-glow':'#ff2d4a','dt-cyan':'#00e5ff',
-        'dt-violet':'#8b5cf6','dt-amber':'#ffb800','dt-emerald':'#10d97f',
-      }, fontFamily: {
-        display:['Orbitron','sans-serif'], body:['Inter','sans-serif'], mono:['JetBrains Mono','monospace'],
-      }}}
-    }
-  </script>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" />
-
-  <style>
-    html, body { margin:0; padding:0; background:#05050a; color:#f5f5f7; font-family:'Inter',sans-serif; overflow:hidden; }
-    html { width:100%; height:100%; }
-    body { width:100%; height:100%; position:relative; }
-    /* 背景渐变（必加） */
-    .bg-gradient {
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(139,92,246,0.55) 0%, transparent 42%),
-        radial-gradient(circle at 88% 82%, rgba(0,229,255,0.40) 0%, transparent 42%),
-        radial-gradient(circle at 50% 50%, rgba(230,0,18,0.30) 0%, transparent 55%),
-        radial-gradient(circle at 30% 75%, rgba(255,184,0,0.18) 0%, transparent 45%),
-        radial-gradient(circle at 75% 25%, rgba(16,217,127,0.15) 0%, transparent 45%);
-      animation: bg-flow 24s ease-in-out infinite alternate;
-    }
-    @keyframes bg-flow {
-      0%   { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, 100% 0%; }
-      33%  { background-position: 25% 25%, 75% 75%, 60% 40%, 20% 80%, 80% 20%; }
-      66%  { background-position: 50% 50%, 50% 50%, 40% 60%, 40% 60%, 60% 40%; }
-      100% { background-position: 70% 70%, 30% 30%, 30% 70%, 60% 40%, 40% 60%; }
-    }
-    /* 玻璃拟态（必加） */
-    .glass {
-      background: rgba(14, 14, 22, 0.42);
-      backdrop-filter: blur(28px) saturate(160%);
-      -webkit-backdrop-filter: blur(28px) saturate(160%);
-      border: 1px solid rgba(245, 245, 247, 0.10);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
-    }
-    /* 发光（按需使用） */
-    .glow-red    { box-shadow: 0 0 22px rgba(230,0,18,0.55), 0 0 4px rgba(255,45,74,0.7); }
-    .glow-cyan   { box-shadow: 0 0 20px rgba(0,229,255,0.45), 0 0 4px rgba(0,229,255,0.7); }
-    .glow-violet { box-shadow: 0 0 22px rgba(139,92,246,0.50); }
-    /* 渐变文字（按需使用） */
-    .grad-rv { background:linear-gradient(135deg,#ff2d4a 0%,#8b5cf6 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .grad-cv { background:linear-gradient(135deg,#00e5ff 0%,#8b5cf6 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .grad-av { background:linear-gradient(135deg,#ffb800 0%,#ff2d4a 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  </style>
-</head>
-```
-
----
-
-## 17. 与项目其他文档的关系
-
-| 文档 | 关系 |
-|------|------|
-| `req.md` | 项目需求总纲（HTML PPT 模板约束） |
-| `videoppt.md` | 视频 PPT 内容生成规则 |
-| `skills/tech.md` | **技术栈选型**（Tailwind / animate.css / Vanta.js 等库的使用） |
-| `skills/page-generation.md` | **页面生成规则**（每页结构、内容组织） |
-| `themes/dark-tech/index.html` | **设计规范可视化**（本主题的视觉参考） |
-| `themes/dark-tech/theme-dark-tech.md` | **本文件：设计规范文档**（AI 生成的硬性约束源） |
-
----
-
-## 附录：与原始项目的 token 对照
-
-| 原 `ed-*` token | 本主题 `dt-*` token | 说明 |
-|-----------------|---------------------|------|
-| `ed-bg` (`#f5f2ed`) | `dt-bg` (`#05050a`) | 背景翻转：米白 → 深空黑 |
-| `ed-ink` (`#1a1a1a`) | `dt-ink` (`#f5f5f7`) | 文字翻转：黑 → 米白 |
-| `ed-accent` (`#e60012`) | `dt-accent` (`#e60012`) | **品牌红保持一致** |
-| — | 新增 `dt-cyan` / `dt-violet` / `dt-amber` / `dt-emerald` | 科技感辅色（4 色） |
-| — | 新增 `dt-glow` (`#ff2d4a`) | 红色 glow 变体 |
-| `font-serif` | 删除 | 暗色科技感不用衬线 |
-
-**结论：** 沿用 `ed-accent` 作为品牌色锚点，整体配色从米白底转向深空黑底，扩展出 4 色科技辅色系。
