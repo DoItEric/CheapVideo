@@ -8,13 +8,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles/ppt.css" />
+  <link rel="stylesheet" href="./styles/index.css" />
 </head>
 <body>
   <main class="stage-shell">
     <section class="stage-wrapper">
       <div id="slide-stage" class="slide-stage">
-        <iframe id="slide-frame" class="slide-frame" title="ppt-page" src="./pages/page1.html" allowtransparency="true"></iframe>
+        <iframe id="slide-frame" class="slide-frame" title="ppt-page" src="about:blank" allowtransparency="true"></iframe>
         <div class="progress-wrap" aria-label="播放进度">
           <div id="progress-bar" class="progress-bar"></div>
         </div>
@@ -33,28 +33,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
   <script>
-    (function () {
-      const pages = [        
-        { src: "./pages/page1.html", duration: 13900, transition: "slide" },
-        { src: "./pages/page2.html", duration: 18933, transition: "glitch" },
-        { src: "./pages/page3.html", duration: 16900, transition: "canvas-pull" },
-        { src: "./pages/page4.html", duration: 967, transition: "flip" },
-        { src: "./pages/page5.html", duration: 11600, transition: "slide" },
-        { src: "./pages/page6.html", duration: 5400, transition: "glitch" },
-        { src: "./pages/page7.html", duration: 19000, transition: "canvas-pull" },
-        { src: "./pages/page8.html", duration: 9067, transition: "flip" },
-        { src: "./pages/page9.html", duration: 26166, transition: "slide" },
-        { src: "./pages/page10.html", duration: 14134, transition: "glitch" },
-        { src: "./pages/page11.html", duration: 14967, transition: "canvas-pull" },
-        { src: "./pages/page12.html", duration: 20400, transition: "flip" },
-        { src: "./pages/page13.html", duration: 15600, transition: "slide" },
-        { src: "./pages/page14.html", duration: 6900, transition: "glitch" },
-        { src: "./pages/page15.html", duration: 17500, transition: "canvas-pull" },
-        { src: "./pages/page16.html", duration: 14333, transition: "flip" },
-        { src: "./pages/page17.html", duration: 15434, transition: "slide" },
-        { src: "./pages/page18.html", duration: 13666, transition: "glitch" }
-      ];
-
+    (async function () {
       const frame = document.getElementById("slide-frame");
       const stage = document.getElementById("slide-stage");
       const progressBar = document.getElementById("progress-bar");
@@ -63,6 +42,24 @@
       const prevBtn = document.getElementById("prev-btn");
       const playBtn = document.getElementById("play-btn");
       const nextBtn = document.getElementById("next-btn");
+
+      let pages = [];
+      try {
+        const response = await fetch("./pages.json");
+        if (!response.ok) {
+          throw new Error("无法加载 pages.json: " + response.status);
+        }
+        const data = await response.json();
+        pages = Array.isArray(data) ? data : (Array.isArray(data.pages) ? data.pages : []);
+      } catch (err) {
+        console.error("[PPT] 加载 pages.json 失败：", err);
+        return;
+      }
+
+      if (!pages.length) {
+        console.warn("[PPT] pages.json 中没有任何页面配置。");
+        return;
+      }
 
       let currentIndex = 0;
       let isPlaying = false;
