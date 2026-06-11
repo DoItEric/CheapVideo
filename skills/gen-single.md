@@ -1,6 +1,6 @@
 # Skill: 生成 HTML-PPT 页面（gen）
 
-> **本 Skill 的唯一目标**：根据 `pages.json` 的内容，为每一条 `page` 记录生成对应的演示页面。
+> **本 Skill 的唯一目标**：根据 `pages.json` 的元数据，生成对应的演示页面。
 > 生成结果必须能直接被 `index.html` 加载并播放，能被 `record.js` 录制成视频。
 
 ---
@@ -44,7 +44,7 @@ html-ppt-template/
 
 ---
 
-## 2. `pages.json` 结构（必读）
+## 2. `pages.json` 元数据结构（必读）
 
 ```json
 {
@@ -154,12 +154,10 @@ html-ppt-template/
 
 ## 8. 生成工作流（按顺序执行）
 
-### Step 1：读取并解析 `pages.json`
+### Step 1：读取上下文中的`pages.json`元数据
 在项目根目录下，名为pages.json
 
-### Step 2：为每页生成 3 个文件
-
-按 `pages.json.pages` 数组顺序逐条处理。每条记录：
+### Step 2：生成 3 个文件
 
 1. **设计画面**（先想清楚视觉重心、版式、配色、动效）
 2. **写 `pageN.html`**（套 §3.1 骨架 + 嵌入 `<script id="page-timeline">`）
@@ -191,32 +189,12 @@ python -m http.server 8080
 
 ```bash
 # 每个 page 必须三件套齐全，不能少文件
-for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 ...; do
-  test -f "pages/page${n}.html" || echo "[缺失] page${n}.html"
-  test -f "pages/page${n}.css"  || echo "[缺失] page${n}.css"
-  test -f "pages/page${n}.js"   || echo "[缺失] page${n}.js"
-done
+test -f "pages/page${n}.html" || echo "[缺失] page${n}.html"
+test -f "pages/page${n}.css"  || echo "[缺失] page${n}.css"
+test -f "pages/page${n}.js"   || echo "[缺失] page${n}.js"
 ```
 
-### 9.2 `pages.json` 与文件交叉校验
-
-```bash
-node -e "
-const p=require('./pages.json');
-const fs=require('fs');
-let bad=0;
-p.pages.forEach(pg=>{
-  for (const f of [pg.pagePath, pg.cssPath, pg.jsPath]) {
-    if (!fs.existsSync(f)) { console.log('[缺失]', f); bad++; }
-  }
-});
-process.exit(bad?1:0);
-"
-```
-
-退出码非 0 → 修复后再继续。
-
-### 9.3 内容自检清单（每页生成完后逐项打勾）
+### 9.2 内容自检清单（每页生成完后逐项打勾）
 
 - [ ] 画面**没有时间码**（不要出现 `0:00`、`00:00`、毫秒数）
 - [ ] 画面**没有 1:1 复述 items[].text** 的呆板大字（要做视觉包装）
@@ -227,7 +205,7 @@ process.exit(bad?1:0);
 - [ ] **第 1 页**有视觉钩子（大字 / 几何转场 / 3D 元素 / 巨型 emoji）
 - [ ] **最后 1 页**有金句落款（账号名 / slogan）
 - [ ] 引用 `remixicon` / `typed.js` / `vanta` 时 **CDN URL 正确**（见 `themes/tech.md`）
-- [ ] HTML 中 `<script id="page-timeline">` 里的 JSON **与 pages.json 中对应页的 items 数组完全一致**
+- [ ] HTML 中 `<script id="page-timeline">` 里的 JSON **与 pages.json 元数据中对应页的 items 数组完全一致**
 ---
 
-> **一句话总结**：拿到 `pages.json` 的每一条 `page`，按"读 items → 设计画面（含 emoji 主视觉） → 写 .html/.css/.js → 跑 §9 检查"的流程循环 N 次，直到所有页都能在 `index.html` 里流畅播放，并且 **没有任何一页是"大大小小的方框"**。
+> **一句话总结**：拿到 `page`，按"读 items → 设计画面（含 emoji 主视觉） → 写 .html/.css/.js → 跑 §9 检查"的流程循环 N 次，直到所有页都能在 `index.html` 里流畅播放，并且 **没有任何一页是"大大小小的方框"**。
