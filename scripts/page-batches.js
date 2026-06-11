@@ -448,7 +448,8 @@ const fs = require('fs');
 const path = require('path');
 
 const SCRIPT_DIR = __dirname;
-const PROJECT_ROOT = path.join(SCRIPT_DIR, '..', '..');
+// 使用绝对路径（与 sh/bat 一致），避免从不同目录运行时路径错误
+const PROJECT_ROOT = ${JSON.stringify(projectRoot)};
 process.chdir(PROJECT_ROOT);
 console.log('═══ [GEN] ${pageTag} (cwd: ' + process.cwd() + ') ═══');
 
