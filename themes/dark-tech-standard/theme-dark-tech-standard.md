@@ -46,7 +46,7 @@
 
 - **设计画布：** 960 × 720（与 `index.html` 的 `DESIGN_W / DESIGN_H` 一致）
 - **目标场景：** iframe 内加载，被父容器 `transform: scale()` 等比缩放
-- **最终观看：** 手机端缩放后仍清晰（**所有字号放大约 1.6 倍**）
+- **最终观看：** 手机端缩放后仍清晰（**所有字号放大约 3.2 倍**）
 
 ### 强制 CSS（每个页面必须）
 
@@ -148,33 +148,33 @@ tailwind.config = {
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 ```
 
-### 字号阶梯（5 阶 · 已放大 1.6×）
+### 字号阶梯（5 阶 · 已放大 3.2×）
 
 | 级别 | 字号 | Tailwind / inline style | 用途 |
 |------|------|-------------------------|------|
-| display | **44px** | `font-display font-black text-[44px]` | 封面大标题、关键数字 |
-| h1 | **30px** | `font-display font-bold text-[30px]` | 页内主标题、卡片标题 |
-| h2 | **24px** | `font-display font-bold text-[24px]` | 二级标题、分区标题 |
-| body | **18px** | `font-body text-[18px]` | 正文段落、说明 |
-| caption | **14px** | `font-mono text-[14px]` | 辅助标签、注释 |
+| display | **88px** | `font-display font-black text-[88px]` | 封面大标题、关键数字 |
+| h1 | **60px** | `font-display font-bold text-[60px]` | 页内主标题、卡片标题 |
+| h2 | **48px** | `font-display font-bold text-[48px]` | 二级标题、分区标题 |
+| body | **36px** | `font-body text-[36px]` | 正文段落、说明 |
+| caption | **28px** | `font-mono text-[28px]` | 辅助标签、注释 |
 
 ### 字号阶梯示例
 
 ```html
 <!-- display：封面 -->
-<h1 class="font-display font-black text-[64px] leading-none">DARK-TECH</h1>
+<h1 class="font-display font-black text-[88px] leading-none">DARK-TECH</h1>
 
 <!-- h1：页内主标题 -->
-<h2 class="font-display font-bold text-[30px]">核心论点</h2>
+<h2 class="font-display font-bold text-[60px]">核心论点</h2>
 
 <!-- h2：分区 -->
-<h3 class="font-display font-bold text-[24px]">数据洞察</h3>
+<h3 class="font-display font-bold text-[48px]">数据洞察</h3>
 
 <!-- body：正文 -->
-<p class="font-body text-[18px]">...</p>
+<p class="font-body text-[36px]">...</p>
 
 <!-- caption：标签 -->
-<span class="font-mono text-[14px] text-dts-mute">DATA · 渐变大数字</span>
+<span class="font-mono text-[28px] text-dts-mute">DATA · 渐变大数字</span>
 ```
 
 ### 字体使用规则
@@ -281,7 +281,7 @@ tailwind.config = {
 **用法：**
 ```html
 <h1 class="grad-bv font-display font-black">DARK-TECH</h1>
-<div class="grad-cv font-display font-black text-[44px]">2,847</div>
+<div class="grad-cv font-display font-black text-[88px]">2,847</div>
 ```
 
 **❌ 禁止使用**：`dark-tech` 主题的红紫渐变（`grad-rv`）和黄红渐变（`grad-av`），娱乐感太强。
@@ -504,8 +504,8 @@ tailwind.config = {
 ```html
 <div class="glass rounded-lg p-3">
   <div class="text-2xl mb-1">📊</div>
-  <div class="font-display font-bold text-[24px]">87%</div>
-  <div class="font-mono text-[14px] text-dts-mute">效率提升</div>
+  <div class="font-display font-bold text-[48px]">87%</div>
+  <div class="font-mono text-[28px] text-dts-mute">效率提升</div>
 </div>
 ```
 
@@ -515,7 +515,7 @@ tailwind.config = {
 **方式 C：标题内嵌（慎用 · 1 页最多 1 个）**
 
 ```html
-<h2 class="font-display font-bold text-[30px]">
+<h2 class="font-display font-bold text-[60px]">
   数据洞察 📊
 </h2>
 ```
