@@ -4,7 +4,7 @@
  *
  * 用途：把 pages.json 切成 N 批（默认 1 个 page 一批），为每个 page 生成独立的
  *       cline GEN 脚本（sh / bat / js 三种格式）以及统一串联的 run.sh / run.bat。
- *       提示词中嵌入完整的 tech.md / theme-*.md / index.html / gen.md，
+ *       提示词中嵌入完整的 tech.md / theme-*.md / index.html / gen-single.md，
  *       让 cline 拥有一次性生成页面所需的全部上下文（不节选）。
  *
  * 输出到 batches/（扁平结构，Windows 路径更稳）：
@@ -30,7 +30,7 @@ function parseArgs(argv) {
     startScene: 1,
     endScene: null,
     theme: 'dark-tech-standard',
-    skill: 'skills/gen.md',
+    skill: 'skills/gen-single.md',
     model: null,
     clineBin: 'cline',
   };
@@ -94,7 +94,7 @@ function printHelp() {
       '  -s, --start S           起始 page index（默认 1）',
       '  -e, --end E             结束 page index（默认 pages.length）',
       '  -t, --theme NAME        主题目录名（默认 dark-tech-standard）',
-      '  -k, --skill PATH        skill md 路径（默认 skills/gen.md）',
+      '  -k, --skill PATH        skill md 路径（默认 skills/gen-single）',
       '  -m, --model NAME        透传给 cline 的模型参数',
       '      --cline-bin BIN     cline 可执行文件（默认 cline）',
       '  -h, --help              打印本帮助',
@@ -204,7 +204,7 @@ function buildPrompt({
     `│   └── ${theme}/           ← ⭐ 当前主题（你必须严格遵守）`,
     `│       ├── theme-${theme}.md`,
     '│       └── index.html      ← 主题示例页（可参考视觉风格）',
-    '├── skills/gen.md           ← ⭐ 生成规则（必读）',
+    '├── skills/gen-single.md    ← ⭐ 生成规则（必读）',
     '├── record.js               ← Puppeteer 录屏脚本（生成后用于录视频）',
     '└── scripts/page-batches.js ← 本脚本',
     '```',
@@ -213,7 +213,7 @@ function buildPrompt({
     `1. themes/tech.md`,
     `2. themes/${theme}/theme-${theme}.md`,
     `3. themes/${theme}/index.html`,
-    `4. skills/gen.md`,
+    `4. skills/gen-single.md`,
     '',
     '# 本批 page 元数据（来自 pages.json，已归一化）',
     '```json',
@@ -257,7 +257,7 @@ function buildPrompt({
     `## =============== themes/${theme}/index.html ===============`,
     themeExample,
     '',
-    '## =============== skills/gen.md ===============',
+    '## =============== skills/gen-single.md ===============',
     skillMd,
     '',
     '## =============== END ===============',

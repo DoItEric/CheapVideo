@@ -1,6 +1,6 @@
 # Skill: 生成 HTML-PPT 页面（gen）
 
-> **本 Skill 的唯一目标**：根据 `pages.json` 的元数据，生成对应的演示页面。
+> **本 Skill 的唯一目标**：根据 `pages` 的元数据，生成对应的演示页面。
 > 生成结果必须能直接被 `index.html` 加载并播放，能被 `record.js` 录制成视频。
 
 ---
@@ -9,8 +9,8 @@
 
 ```
 html-ppt-template/
-├── index.html              # 播放器主入口（加载 pages.json 并 iframe 切换页面）
-├── pages.json              # 唯一的"内容源"，决定每一页要讲什么
+├── index.html              # 播放器主入口（加载 pages 并 iframe 切换页面）
+├── pages                   # 唯一的"内容源"，决定每一页要讲什么
 ├── pages/                  # 生成的页面存放目录（由本 Skill 填充）
 │   ├── page1.html
 │   ├── page1.css
@@ -44,7 +44,7 @@ html-ppt-template/
 
 ---
 
-## 2. `pages.json` 元数据结构（必读）
+## 2. `pages` 元数据结构（必读）
 
 ```json
 {
@@ -154,8 +154,8 @@ html-ppt-template/
 
 ## 8. 生成工作流（按顺序执行）
 
-### Step 1：读取上下文中的`pages.json`元数据
-在项目根目录下，名为pages.json
+### Step 1：读取上下文中的`pages`元数据
+在项目根目录下，名为pages
 
 ### Step 2：生成 3 个文件
 
@@ -205,7 +205,7 @@ test -f "pages/page${n}.js"   || echo "[缺失] page${n}.js"
 - [ ] **第 1 页**有视觉钩子（大字 / 几何转场 / 3D 元素 / 巨型 emoji）
 - [ ] **最后 1 页**有金句落款（账号名 / slogan）
 - [ ] 引用 `remixicon` / `typed.js` / `vanta` 时 **CDN URL 正确**（见 `themes/tech.md`）
-- [ ] HTML 中 `<script id="page-timeline">` 里的 JSON **与 pages.json 元数据中对应页的 items 数组完全一致**
+- [ ] HTML 中 `<script id="page-timeline">` 里的 JSON **与 pages 元数据中对应页的 items 数组完全一致**
 ---
 
 > **一句话总结**：拿到 `page`，按"读 items → 设计画面（含 emoji 主视觉） → 写 .html/.css/.js → 跑 §9 检查"的流程循环 N 次，直到所有页都能在 `index.html` 里流畅播放，并且 **没有任何一页是"大大小小的方框"**。
