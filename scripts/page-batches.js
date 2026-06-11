@@ -315,7 +315,8 @@ process.exit(r.status || 0);
 
 /* ──────────────────── main ──────────────────── */
 function main() {
-  const root = process.cwd();
+  // 使用脚本所在项目的根目录（即 scripts/ 的父目录），而不是进程当前工作目录
+  const root = path.resolve(__dirname, '..');
   const args = parseArgs(process.argv.slice(2));
 
   if (!Number.isFinite(args.batchSize) || args.batchSize < 1) {
